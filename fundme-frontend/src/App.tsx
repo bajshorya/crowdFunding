@@ -126,7 +126,7 @@ function App() {
       <Header account={account} setAccount={setAccount} provider={provider} />
       <main className="container mx-auto px-4 py-12 pt-16">
         <h1 className="p-10 text-5xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500 animate-pulse">
-          FundMe DApp
+          CrowdFunding DApp
         </h1>
         <section className="mb-12 bg-gray-800/50 p-6 rounded-sm shadow-xs border border-pink-500/50 hover:shadow-md transition-shadow duration-300">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">
