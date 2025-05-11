@@ -130,10 +130,10 @@ function App() {
         </h1>
         <section className="mb-12 bg-gray-800/50 p-6 rounded-sm shadow-xs border border-pink-500/50 hover:shadow-md transition-shadow duration-300">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">
-            About FundMe
+            About CrowdFund
           </h2>
           <p className="text-gray-300 mb-4">
-            FundMe is a decentralized crowdfunding platform built on the Sepolia
+            CrowdFund is a decentralized crowdfunding platform built on the Sepolia
             testnet. It allows anyone to contribute ETH to a shared pool,
             supporting a cause or project. Only the contract owner can withdraw
             the funds to ensure they are used as intended.
