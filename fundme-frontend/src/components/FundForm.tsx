@@ -49,7 +49,7 @@ const FundForm: React.FC<FundFormProps> = ({ contract, account }) => {
         type="number"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        placeholder="Enter ETH amount (min $5 USD)"
+        placeholder="Enter ETH amount (min 0.01 ETH)"
         className="w-full p-2 mb-4 bg-gray-900 text-white border border-gray-700 rounded-xs focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all"
       />
       <button
