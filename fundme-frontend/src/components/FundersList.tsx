@@ -16,7 +16,7 @@ const FundersList: React.FC<FundersListProps> = ({ contract }) => {
 
   const fetchFunders = async () => {
     if (!contract) {
-      setError("Contract not connected");
+      setError("Wallet not connected");
       return;
     }
 
