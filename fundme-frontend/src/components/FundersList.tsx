@@ -80,7 +80,7 @@ const FundersList: React.FC<FundersListProps> = ({ contract }) => {
           </h6>
         </div>
         <div className="text-purple-400 bg-gray-900/50 px-3 py-1 rounded-xs border border-purple-500/50">
-          Total Funders: {totalFunders}
+          Total Fundings: {totalFunders}
         </div>
       </div>
 
