@@ -11,7 +11,7 @@ const AboutUs = () => {
         <div className="flex justify-end mb-8">
           <button
             onClick={() => navigate("/")}
-            className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-md hover:bg-gradient-to-l hover:scale-105 transition-all duration-300 shadow-xs"
+            className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-md hover:bg-gradient-to-l hover:scale-105 transition-all duration-300 shadow-xs hover:cursor-pointer"
           >
             Back to Home
           </button>
@@ -163,7 +163,7 @@ const AboutUs = () => {
         <section className="text-center">
           <button
             onClick={() => navigate("/")}
-            className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-md hover:bg-gradient-to-l hover:scale-105 transition-all duration-300 shadow-xs"
+            className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-md hover:bg-gradient-to-l hover:scale-105 transition-all duration-300 shadow-xs hover:cursor-pointer"
           >
             Get Started
           </button>

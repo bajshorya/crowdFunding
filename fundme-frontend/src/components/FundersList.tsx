@@ -73,7 +73,12 @@ const FundersList: React.FC<FundersListProps> = ({ contract }) => {
   return (
     <div className="mt-12 bg-gray-800/50 p-6 rounded-2xl shadow-xs border border-purple-500/50 hover:shadow-md transition-shadow duration-300">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-pink-400">Funders List </h2>
+        <div>
+          <h2 className="text-2xl font-bold text-pink-400">Funders List </h2>
+          <h6 className="text-xs font-extralight text-purple-500">
+            Refreshes every 30sec
+          </h6>
+        </div>
         <div className="text-purple-400 bg-gray-900/50 px-3 py-1 rounded-xs border border-purple-500/50">
           Total Funders: {totalFunders}
         </div>

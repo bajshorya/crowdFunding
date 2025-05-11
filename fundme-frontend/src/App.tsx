@@ -133,10 +133,10 @@ function App() {
     <div className="bg-gradient-to-b from-gray-900 to-black text-white min-h-screen font-mono">
       <Header account={account} setAccount={setAccount} provider={provider} />
       <main className="container mx-auto px-4 py-12 pt-16">
-        <h1 className="p-10 text-5xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500 animate-pulse">
+        <h1 className="p-10 text-5xl font-bold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500 animate-pulse">
           CrowdFunding DApp
         </h1>
-        <p className="text-gray-300 mb-4 text-center">
+        <p className="text-gray-300 mb-10 text-center">
           <strong>Contract Owner:</strong>{" "}
           <span className="text-purple-400">
             {ownerAddress.slice(0, 6)}...{ownerAddress.slice(-4)}

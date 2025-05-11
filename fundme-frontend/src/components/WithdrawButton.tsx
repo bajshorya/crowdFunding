@@ -38,7 +38,7 @@ const WithdrawButton: React.FC<WithdrawButtonProps> = ({ contract }) => {
       <button
         onClick={withdraw}
         disabled={loading}
-        className="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xs hover:bg-gradient-to-l disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+        className="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xs hover:bg-gradient-to-l disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:cursor-pointer"
       >
         {loading ? "Withdrawing..." : "Withdraw Funds"}
       </button>

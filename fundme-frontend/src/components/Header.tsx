@@ -61,7 +61,9 @@ const Header: React.FC<HeaderProps> = ({ account, setAccount, provider }) => {
   return (
     <header className="fixed top-0 left-0 right-0 bg-black/80 backdrop-blur-md z-50">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-pink-500">CrowdFund</h1>
+        <h1 className="text-4xl font-bold text-pink-500 hover:cursor-pointer hover:scale-105 transition-transform duration-300">
+          <span onClick={() => navigate("/")}>CrowdFund</span>
+        </h1>
         <div className="flex space-x-4">
           <h1
             onClick={() => navigate("/about")}

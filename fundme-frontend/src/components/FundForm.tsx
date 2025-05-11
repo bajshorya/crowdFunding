@@ -55,7 +55,7 @@ const FundForm: React.FC<FundFormProps> = ({ contract, account }) => {
       <button
         onClick={fund}
         disabled={loading || !account}
-        className="w-full px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xs hover:bg-gradient-to-l disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+        className="w-full px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xs hover:bg-gradient-to-l disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:cursor-pointer"
       >
         {loading ? "Funding..." : "Fund Now"}
       </button>
