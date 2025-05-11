@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
             href="https://x.ai"
             className="text-purple-400 hover:text-purple-300 transition-colors duration-300"
           >
-            xAI
+            Shorya Baj, Kanak Poddar, Rahul Sahani, Tanvi Sharma
           </a>
         </p>
         <p className="mt-2">

@@ -1,34 +1,39 @@
 import { useState } from "react";
-import { ethers } from "ethers";
+import { Contract } from "ethers";
+import { toast } from "react-toastify";
 
 interface WithdrawButtonProps {
-  contract: ethers.Contract | null;
+  contract: Contract | null;
 }
 
 const WithdrawButton: React.FC<WithdrawButtonProps> = ({ contract }) => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const withdraw = async () => {
     if (!contract) {
-      setError("Contract not connected!");
+      toast.error("Contract not connected!", { theme: "dark" });
       return;
     }
     setLoading(true);
-    setError("");
     try {
       const tx = await contract.cheaperWithdraw();
       await tx.wait();
-      alert("Withdrawal successful!");
+      toast.success("Withdrawal successful!", { theme: "dark" });
     } catch (err: any) {
-      setError(err.message || "Failed to withdraw!");
+      if (err.data === "0x579610db") {
+        toast.error("Only the contract owner can withdraw funds!", {
+          theme: "dark",
+        });
+      } else {
+        toast.error(err.message || "Failed to withdraw!", { theme: "dark" });
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-gray-800/50 p-6 rounded-sm shadow-xs border border-purple-500/50 hover:shadow-md transition-shadow duration-300">
+    <div className="bg-gray-800/50 p-6 rounded-2xl shadow-xs border border-purple-500/50 hover:shadow-md transition-shadow duration-300">
       <h2 className="text-2xl font-bold mb-4 text-pink-400">Owner Withdraw</h2>
       <button
         onClick={withdraw}
@@ -37,7 +42,6 @@ const WithdrawButton: React.FC<WithdrawButtonProps> = ({ contract }) => {
       >
         {loading ? "Withdrawing..." : "Withdraw Funds"}
       </button>
-      {error && <p className="mt-2 text-red-400">{error}</p>}
     </div>
   );
 };

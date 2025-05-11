@@ -1,5 +1,6 @@
 import { BrowserProvider } from "ethers";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface HeaderProps {
   account: string | null;
@@ -9,37 +10,57 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ account, setAccount, provider }) => {
   const [isConnecting, setIsConnecting] = useState(false);
-  const [error, setError] = useState("");
 
   const connectWallet = async () => {
     if (!provider) {
-      setError("No Ethereum wallet detected. Please install MetaMask!");
+      toast.error("No Ethereum wallet detected. Please install MetaMask!", {
+        theme: "dark",
+      });
       return;
     }
     setIsConnecting(true);
-    setError("");
     try {
       const accounts = await provider.send("eth_requestAccounts", []);
       if (accounts.length > 0) {
         setAccount(accounts[0]);
       }
     } catch (err: any) {
-      setError("Failed to connect wallet: " + (err.message || "Unknown error"));
+      toast.error(
+        "Failed to connect wallet: " + (err.message || "Unknown error"),
+        {
+          theme: "dark",
+        }
+      );
     } finally {
       setIsConnecting(false);
     }
   };
 
-  const disconnectWallet = () => {
+  const disconnectWallet = async () => {
+    if (provider) {
+      try {
+        // Attempt to revoke permissions (MetaMask-specific)
+        await provider.send("wallet_revokePermissions", [
+          {
+            eth_accounts: {},
+          },
+        ]);
+      } catch (err) {
+        // If revocation fails, prompt manual disconnect
+        toast.warn(
+          "Please manually disconnect this site in MetaMask: Settings > Connected Sites > http://localhost:5173",
+          { theme: "dark", autoClose: 10000 }
+        );
+      }
+    }
     setAccount(null);
-    setError("");
-    // Note: MetaMask doesn't provide a native disconnect API, so we clear the local state
+    toast.success("Wallet disconnected!", { theme: "dark" });
   };
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-black/80 backdrop-blur-md z-50">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-pink-500">FundMe</h1>
+        <h1 className="text-2xl font-bold text-pink-500">CrowdFunding</h1>
         <div className="flex items-center space-x-4">
           {account ? (
             <>
@@ -64,9 +85,6 @@ const Header: React.FC<HeaderProps> = ({ account, setAccount, provider }) => {
           )}
         </div>
       </div>
-      {error && (
-        <div className="bg-red-500/80 text-white text-center py-2">{error}</div>
-      )}
     </header>
   );
 };
