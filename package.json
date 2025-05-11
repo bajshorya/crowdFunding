@@ -3,6 +3,7 @@
     "@chainlink/contracts": "^1.4.0"
   },
   "devDependencies": {
-    "dotenv": "^16.5.0"
+    "dotenv": "^16.5.0",
+    "ethers": "^6.14.0"
   }
 }
