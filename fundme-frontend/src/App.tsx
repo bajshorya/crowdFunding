@@ -20,6 +20,26 @@ function App() {
   const [ownerAddress, setOwnerAddress] = useState<string>("Fetching...");
 
   useEffect(() => {
+    const checkNetwork = async () => {
+      if (window.ethereum) {
+        const chainId = await window.ethereum.request({
+          method: "eth_chainId",
+        });
+        if (chainId !== "0xaa36a7") {
+          try {
+            await window.ethereum.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: "0xaa36a7" }],
+            });
+          } catch (err: any) {
+            toast.error("Please switch to the Sepolia network!", {
+              theme: "dark",
+            });
+          }
+        }
+      }
+    };
+
     const init = async () => {
       if (!window.ethereum) {
         console.error("Please install MetaMask or another Ethereum wallet!");
@@ -29,10 +49,11 @@ function App() {
         return;
       }
 
+      await checkNetwork();
+
       const web3Provider = new BrowserProvider(window.ethereum);
       setProvider(web3Provider);
 
-      // Check if already connected
       const accounts = await web3Provider.listAccounts();
       let currentAccount: string | null = null;
       if (accounts.length > 0) {
@@ -40,7 +61,6 @@ function App() {
         setAccount(currentAccount);
       }
 
-      // Initialize signer and contract
       try {
         const signer = await web3Provider.getSigner();
         setSigner(signer);
@@ -51,28 +71,19 @@ function App() {
         );
         setContract(contractInstance);
 
-        // Fetch owner address
-        try {
-          const owner = await contractInstance.getOwner();
-          setOwnerAddress(owner);
-          console.log("Connected account:", currentAccount);
-          console.log("Contract owner:", owner);
-          if (currentAccount) {
-            const isOwnerCheck =
-              currentAccount.toLowerCase() === owner.toLowerCase();
-            console.log("Is owner:", isOwnerCheck);
-            setIsOwner(isOwnerCheck);
-          }
-        } catch (err) {
-          console.error("Failed to fetch owner:", err);
-          toast.error("Failed to fetch contract owner!", { theme: "dark" });
-          setOwnerAddress("Unknown");
+        const owner = await contractInstance.getOwner();
+        setOwnerAddress(owner);
+        if (currentAccount) {
+          const isOwnerCheck =
+            currentAccount.toLowerCase() === owner.toLowerCase();
+          setIsOwner(isOwnerCheck);
         }
       } catch (err) {
         console.error("Failed to initialize signer or contract:", err);
+        toast.error("Failed to fetch contract owner!", { theme: "dark" });
+        setOwnerAddress("Unknown");
       }
 
-      // Listen for account changes
       window.ethereum.on?.("accountsChanged", async (accounts: string[]) => {
         if (accounts.length > 0) {
           const newAccount = accounts[0];
@@ -88,12 +99,7 @@ function App() {
             setContract(contractInstance);
             const owner = await contractInstance.getOwner();
             setOwnerAddress(owner);
-            console.log("New account:", newAccount);
-            console.log("Contract owner:", owner);
-            const isOwnerCheck =
-              newAccount.toLowerCase() === owner.toLowerCase();
-            console.log("Is owner:", isOwnerCheck);
-            setIsOwner(isOwnerCheck);
+            setIsOwner(newAccount.toLowerCase() === owner.toLowerCase());
           } catch (err) {
             console.error("Failed to handle account change:", err);
             toast.error("Failed to fetch contract owner on account change!", {
@@ -111,9 +117,9 @@ function App() {
         }
       });
     };
+
     init();
 
-    // Cleanup listener on unmount
     return () => {
       if (window.ethereum?.removeListener) {
         window.ethereum.removeListener("accountsChanged", () => {});
@@ -133,10 +139,10 @@ function App() {
             About CrowdFund
           </h2>
           <p className="text-gray-300 mb-4">
-            CrowdFund is a decentralized crowdfunding platform built on the Sepolia
-            testnet. It allows anyone to contribute ETH to a shared pool,
-            supporting a cause or project. Only the contract owner can withdraw
-            the funds to ensure they are used as intended.
+            CrowdFund is a decentralized crowdfunding platform built on the
+            Sepolia testnet. It allows anyone to contribute ETH to a shared
+            pool, supporting a cause or project. Only the contract owner can
+            withdraw the funds to ensure they are used as intended.
           </p>
           <h3 className="text-xl font-semibold mb-2 text-pink-400">
             How to Use

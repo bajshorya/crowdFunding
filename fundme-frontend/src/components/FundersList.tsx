@@ -1,58 +1,63 @@
 import { useState, useEffect } from "react";
 import { Contract, formatEther } from "ethers";
 import { toast } from "react-toastify";
-
 interface FundersListProps {
   contract: Contract | null;
 }
-
 interface Funder {
   address: string;
-  amount: string; // Formatted as ETH (string)
+  amount: string;
 }
-
 const FundersList: React.FC<FundersListProps> = ({ contract }) => {
   const [funders, setFunders] = useState<Funder[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [totalFunders, setTotalFunders] = useState<number>(0);
 
   const fetchFunders = async () => {
     if (!contract) {
-      //   toast.error("Contract not connected!", { theme: "dark" });
+      setError("Contract not connected");
       return;
     }
 
     setLoading(true);
+    setError(null);
     try {
       const newFunders: Funder[] = [];
-      let index = 0;
 
-      // Iterate until getFunder reverts or returns zero address
-      while (true) {
+      let funderCount = 0;
+      try {
+        while (true) {
+          await contract.getFunder(funderCount);
+          funderCount++;
+        }
+      } catch (err) {
+        setTotalFunders(funderCount);
+      }
+
+      for (let i = 0; i < funderCount; i++) {
         try {
-          const funderAddress = await contract.getFunder(index);
-          if (funderAddress === "0x0000000000000000000000000000000000000000") {
-            break; // No more funders
-          }
-          const amountWei = await contract.getAmountFunded(funderAddress);
+          const funderAddress = await contract.getFunder(i);
+          const amountWei = await contract.getAddressToAmountFunded(
+            funderAddress
+          );
           const amountEth = formatEther(amountWei);
+
           newFunders.push({
             address: funderAddress,
             amount: amountEth,
           });
-          index++;
         } catch (err) {
-          // Assume error means no more funders
-          break;
+          continue;
         }
       }
 
       setFunders(newFunders);
     } catch (err: any) {
+      setError("Failed to fetch funders: " + (err.message || "Unknown error"));
       toast.error(
         "Failed to fetch funders: " + (err.message || "Unknown error"),
-        {
-          theme: "dark",
-        }
+        { theme: "dark" }
       );
     } finally {
       setLoading(false);
@@ -60,23 +65,21 @@ const FundersList: React.FC<FundersListProps> = ({ contract }) => {
   };
 
   useEffect(() => {
-    fetchFunders(); // Initial fetch
-
-    // Set up interval to refresh every 10 seconds
-    const intervalId = setInterval(fetchFunders, 10000);
-
-    // Cleanup interval on unmount
+    fetchFunders();
+    const intervalId = setInterval(fetchFunders, 30000);
     return () => clearInterval(intervalId);
   }, [contract]);
 
   return (
     <div className="mt-12 bg-gray-800/50 p-6 rounded-2xl shadow-xs border border-purple-500/50 hover:shadow-md transition-shadow duration-300">
-      <h2 className="text-2xl font-bold mb-4 text-pink-400">
-        Funders List{" "}
-        <h3 className="text-sm font-light mb-4 text-purple-400">
-          (refreshes every 10 seconds)
-        </h3>
-      </h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-pink-400">Funders List </h2>
+        <div className="text-purple-400 bg-gray-900/50 px-3 py-1 rounded-xs border border-purple-500/50">
+          Total Funders: {totalFunders}
+        </div>
+      </div>
+
+      {error && <p className="text-red-400 mb-4">Error: {error}</p>}
 
       {loading ? (
         <p className="text-purple-400">Loading funders...</p>
@@ -100,5 +103,4 @@ const FundersList: React.FC<FundersListProps> = ({ contract }) => {
     </div>
   );
 };
-
 export default FundersList;
