@@ -5,10 +5,10 @@ const Footer: React.FC = () => {
         <p>
           Built with <span className="text-pink-500">♥</span> by{" "}
           <a
-            href="https://x.ai"
+            href="https://www.linkedin.com/in/shoryabaj/"
             className="text-purple-400 hover:text-purple-300 transition-colors duration-300"
           >
-            Shorya Baj, Kanak Poddar, Rahul Sahani, Tanvi Sharma
+            Shorya Baj
           </a>
         </p>
         <p className="mt-2">
